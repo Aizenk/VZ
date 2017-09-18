@@ -32,6 +32,10 @@ function saveToDatabase($content)
 }
 
 ?>
+<meta charset="utf-8">
+<h2>ram project</h2>
+
+<br>
 
 <form enctype="multipart/form-data" action="index.php" method="POST">
     <!-- Название элемента input определяет имя в массиве $_FILES -->
