@@ -1,13 +1,13 @@
 <?php
 
-namespace VZ\Controller;
+namespace VZ\Lib\Core;
+
 
 use Silex\Application;
-use VZ\Lib\Core\Route;
 
 abstract class AbstractController
 {
-    protected $routes=[];
+    protected $routes = [];
 
     /**
      * @return Route[]
@@ -15,6 +15,11 @@ abstract class AbstractController
     public function getRoutes()
     {
         return $this->routes;
+    }
+
+    protected function getRequest()
+    {
+        return VZ::instance()->getRequest();
     }
 
     protected function addGetRoute($url, $methodName)

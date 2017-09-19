@@ -3,6 +3,7 @@
 namespace VZ\Controller;
 
 use Silex\Application;
+use VZ\Lib\Core\AbstractController;
 
 class ControllerProvider
 {
@@ -22,28 +23,4 @@ class ControllerProvider
             SettingsController::class,
         ];
     }
-
-    private function cntr(Application $app)
-    {
-
-        $app->get('/blog', function () {
-            $output = '';
-            $blogPosts = array(
-                1 => array(
-                    'date' => '2011-03-29',
-                    'author' => 'igorw',
-                    'title' => 'Using Silex',
-                    'body' => '...',
-                ),
-            );
-
-            foreach ($blogPosts as $post) {
-                $output .= $post['title'];
-                $output .= '<br />';
-            }
-
-            return $output;
-        });
-    }
-
 }
