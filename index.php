@@ -1,9 +1,10 @@
 <?php
-require 'vendor/autoload.php';
 
-use Symfony\Component\HttpFoundation\Request;
+$loader = require __DIR__ . '/vendor/autoload.php';
+$loader->addPsr4('VZ\\', __DIR__ . DIRECTORY_SEPARATOR . 'src');
 
-$request = Request::createFromGlobals();
+
+$request = \VZ\Core\Application::instance()->getRequest();
 
 if ($request->isMethod('POST')) {
     $file = $request->files->get('userfile');
