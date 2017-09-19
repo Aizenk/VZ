@@ -3,43 +3,27 @@
 $loader = require __DIR__ . '/vendor/autoload.php';
 $loader->addPsr4('VZ\\', __DIR__ . DIRECTORY_SEPARATOR . 'src');
 
+$app = new Silex\Application();
+$app['debug'] = true;
 
-$request = \VZ\Core\Application::instance()->getRequest();
+$app->get('/blog', function () {
+    $output = '';
+    $blogPosts = array(
+        1 => array(
+            'date' => '2011-03-29',
+            'author' => 'igorw',
+            'title' => 'Using Silex',
+            'body' => '...',
+        ),
+    );
 
-if ($request->isMethod('POST')) {
-    $file = $request->files->get('userfile');
-    /** @var \Symfony\Component\HttpFoundation\File\UploadedFile $file */
-    $file->move('01');
-
-    $content = file('01/' . $file->getFilename());
-    saveToDatabase($content);
-}
-
-function saveToDatabase($content)
-{
-    $user = 'root';
-    $pass = '';
-
-    try {
-        $dbh = new PDO('mysql:host=localhost;dbname=ram', $user, $pass);
-
-        foreach ($content as $row) {
-            $dbh->exec("INSERT INTO `ram`.`texts` (`id`, `text`) VALUES (NULL, '{$row}');");
-        }
-    } catch (PDOException $e) {
-        print "Error!: " . $e->getMessage() . "<br/>";
-        die();
+    foreach ($blogPosts as $post) {
+        $output .= $post['title'];
+        $output .= '<br />';
     }
-}
 
-?>
-<meta charset="utf-8">
-<h2>ram project</h2>
+    return $output;
+});
 
-<br>
-
-<form enctype="multipart/form-data" action="index.php" method="POST">
-    <!-- Название элемента input определяет имя в массиве $_FILES -->
-    Отправить этот файл: <input name="userfile" type="file"/>
-    <input type="submit" value="Send File"/>
-</form>
+$app->run();
+   
