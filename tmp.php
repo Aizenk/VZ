@@ -1,6 +1,6 @@
 <?php
 die;
-$request = \VZ\Core\Application::instance()->getRequest();
+$request = \VZ\Core\VZ::instance()->getRequest();
 
 if ($request->isMethod('POST')) {
     $file = $request->files->get('userfile');

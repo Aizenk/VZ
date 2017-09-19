@@ -2,12 +2,16 @@
 
 namespace VZ\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
-
-class MainController
+class MainController extends AbstractController
 {
-    public function main(Request $request)
+    public function __construct()
     {
+        $this->addGetRoute('/blog', 'main');
+    }
+
+    public function main()
+    {
+        return 100;
     }
 
 }
