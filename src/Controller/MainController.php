@@ -3,18 +3,25 @@
 namespace VZ\Controller;
 
 use VZ\Lib\Core\AbstractController;
+use VZ\Lib\Render\PageRenderer;
 
 class MainController extends AbstractController
 {
     public function __construct()
     {
-        $this->addGetRoute('/blog', 'main');
+        $this->addGetRoute('/', 'main');
+        $this->addGetRoute('/blog', 'blog');
         $this->addGetRoute('/info', 'info');
+    }
+
+    public function blog()
+    {
+        return (new PageRenderer)->render('main\index.phtml');
     }
 
     public function main()
     {
-        return 100;
+        return (new PageRenderer)->render('main\index.phtml');
     }
 
     public function info()
