@@ -4,6 +4,7 @@ namespace VZ\Controller;
 
 use VZ\Lib\Core\AbstractController;
 use VZ\Lib\Render\PageRenderer;
+use VZ\Repository\TextsRepository;
 
 class MainController extends AbstractController
 {
@@ -12,11 +13,19 @@ class MainController extends AbstractController
         $this->addGetRoute('/', 'main');
         $this->addGetRoute('/blog', 'blog');
         $this->addGetRoute('/info', 'info');
+        $this->addGetRoute('/test', 'test');
     }
 
     public function blog()
     {
         return (new PageRenderer)->render('main\index.phtml');
+    }
+
+    public function test()
+    {
+        $val = TextsRepository::instance()->findOneById(43);
+        
+        return var_export( $val);
     }
 
     public function main()

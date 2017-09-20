@@ -10,6 +10,7 @@ class VZ
 {
     private $silex;
     private $request;
+    private $connection;
 
     public static function instance()
     {
@@ -34,6 +35,32 @@ class VZ
     public function getSilex()
     {
         return $this->silex;
+    }
+
+    /**
+     * @return \Doctrine\DBAL\Connection
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function getDbConnection()
+    {
+        if (is_null($this->connection)) {
+            $config = new \Doctrine\DBAL\Configuration();
+
+            $connectionParams = array(
+                'dbname' => 'ram',
+                'user' => 'root',
+                'password' => '',
+                'host' => 'localhost',
+                'driver' => 'pdo_mysql',
+            );
+
+            $conn = \Doctrine\DBAL\DriverManager::getConnection($connectionParams, $config);
+            $conn->connect();
+
+            return $this->connection = $conn;
+        }
+
+        return $this->connection;
     }
 
     /**

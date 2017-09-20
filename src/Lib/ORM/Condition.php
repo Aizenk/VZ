@@ -2,7 +2,7 @@
 
 namespace VZ\Lib\Orm;
 
-abstract class DatabaseEntity
+class Condition
 {
 
 }

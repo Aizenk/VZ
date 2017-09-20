@@ -1,6 +1,7 @@
 {
     "require": {
         "symfony/http-foundation": "^3.3",
-        "silex/silex": "~2.0"
+        "silex/silex": "~2.0",
+        "doctrine/dbal": "v2.5.13"
     }
 }
