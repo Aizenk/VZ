@@ -34,9 +34,14 @@ abstract class DatabaseRepository
 
         $st = VZ::instance()->getDbConnection()->executeQuery($sb->getSQL());
         $val = $st->fetchAll();
+
+        if (empty($val)) {
+            return null;
+        }
+
         $className = (static::getEntityClassName());
 
-        return new $className($val);
+        return new $className(reset($val));
     }
 
 }

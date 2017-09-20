@@ -23,9 +23,9 @@ class MainController extends AbstractController
 
     public function test()
     {
-        $val = TextsRepository::instance()->findOneById(43);
+        $val = TextsRepository::instance()->findOneById(8);
         
-        return var_export( $val);
+        return $val->getText();
     }
 
     public function main()
