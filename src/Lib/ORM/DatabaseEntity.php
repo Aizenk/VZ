@@ -26,4 +26,9 @@ abstract class DatabaseEntity
     {
         return isset($this->data[$name]) ? $this->data[$name] : null;
     }
+
+    public function save()
+    {
+        //build update statement
+    }
 }
