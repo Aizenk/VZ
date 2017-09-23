@@ -2,7 +2,10 @@
 
 namespace VZ\Controller;
 
+use VZ\Entity\Text;
 use VZ\Lib\Core\AbstractController;
+use VZ\Lib\Orm\Dispatcher;
+use VZ\Lib\Orm\Query;
 use VZ\Lib\Render\PageRenderer;
 use VZ\Repository\TextsRepository;
 
@@ -23,9 +26,11 @@ class MainController extends AbstractController
 
     public function test()
     {
-        $val = TextsRepository::instance()->findOneById(8);
-        
-        return $val->getText();
+
+        $res = Text::findOneById(8)->getText();
+        var_export($res);
+        die;
+        return;
     }
 
     public function main()

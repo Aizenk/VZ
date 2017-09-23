@@ -2,7 +2,8 @@
 
 namespace VZ\Entity;
 
-use VZ\Lib\Orm\DatabaseEntity;
+use VZ\Lib\Orm\ActiveRecord;
+use VZ\Lib\Orm\ActiveRecordInterface;
 
 /**
  * Class Text
@@ -11,9 +12,18 @@ use VZ\Lib\Orm\DatabaseEntity;
  *
  * @property int $id
  * @property string $text
+ * @method  static $this findOneById($id)
  */
-class Text extends DatabaseEntity
+class Text extends ActiveRecord implements ActiveRecordInterface
 {
+    /**
+     * @return string
+     */
+    public static function tableName()
+    {
+        return 'texts';
+    }
+
     /**
      * @return int
      */
