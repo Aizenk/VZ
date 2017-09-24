@@ -12,10 +12,11 @@ class FileUploadModel extends ActiveRecord
     {
         $rec = new FileUpload();
 
-        return $rec
+        $rec
             ->setOriginalFileName($file->getClientOriginalName())
             ->setFileName($file->getFilename())
-            ->setSize($file->getSize())
-            ->save();
+            ->setSize($file->getSize());
+
+        return $rec->save() ? $rec : false;
     }
 }

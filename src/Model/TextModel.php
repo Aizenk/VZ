@@ -13,6 +13,6 @@ class TextModel
             ->setText($text)
             ->setIsActive($active);
 
-        return $rec->save();
+        return $rec->save() ? $rec : false;
     }
 }

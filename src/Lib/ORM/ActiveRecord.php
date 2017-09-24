@@ -24,9 +24,6 @@ abstract class ActiveRecord extends Smart
 
     public function save()
     {
-        var_export('i want to save: ');
-        var_export($this->getDataDiff());
-
         if ($this->isNewRecord()) {
             return $this->insert($this->asArray());
         } else {
@@ -40,6 +37,8 @@ abstract class ActiveRecord extends Smart
             throw new \LogicException('not associative');
         }
 
+        $connection = Dispatcher::instance()->getConnection();
+
         $placeHolders = array_map(
             function ($val) {
                 return ':' . $val;
@@ -49,16 +48,24 @@ abstract class ActiveRecord extends Smart
 
         $keysExpression = implode(', ', array_keys($data));
         $valuesExpression = implode(', ', $placeHolders);
+
         $tpl = "INSERT INTO %s (%s) VALUES (%s)";
         $sql = sprintf($tpl, static::tableName(), $keysExpression, $valuesExpression);
-        $st = Dispatcher::instance()->getConnection()->prepare($sql);
+        $st = $connection->prepare($sql);
         $mock = new Smart($data);
 
         foreach ($data as $paramName => $value) {
             $st->bindParam($paramName, $mock->$paramName);
         }
 
-        $st->execute();
+        try{
+            $connection->beginTransaction();
+            $st->execute();
+            $this->id = $connection->lastInsertId();
+            $connection->commit();
+        } catch (\Exception $e){
+            $connection->rollBack();
+        }
 
         return $st->rowCount();
     }
