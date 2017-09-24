@@ -109,6 +109,54 @@ abstract class ActiveRecord extends Smart
         return new static(reset($data));
     }
 
+    /**
+     * @param array $data
+     * @return ActiveRecord
+     */
+    public static function findOneByFields(array $data)
+    {
+        if (!ArrayHelper::isAssociative($data)) {
+            throw new \LogicException('not associative');
+        }
+
+        $qb = self::createQueryBuilder();
+        foreach ($data as $paramName => $value) {
+            $qb->addCondition("t.{$paramName} = {$value}");
+        }
+
+        $data = static::findBySql($qb->getSQL());
+
+        if ($data) {
+            return new static(reset($data));
+        }
+
+        return null;
+    }
+
+    /**
+     * @param array $data
+     * @return ActiveRecord[]
+     */
+    public static function findByFields(array $data)
+    {
+        if (!ArrayHelper::isAssociative($data)) {
+            throw new \LogicException('not associative');
+        }
+
+        $qb = self::createQueryBuilder();
+        foreach ($data as $paramName => $value) {
+            $qb->addCondition("t.{$paramName} = {$value}");
+        }
+
+        $data = static::findBySql($qb->getSQL());
+
+        if ($data) {
+            return static::populate($data);
+        }
+
+        return null;
+    }
+
     public static function findBySql($sql, $params = [])
     {
         $st = Dispatcher::instance()->getConnection()->executeQuery($sql);
@@ -133,5 +181,15 @@ abstract class ActiveRecord extends Smart
         }
 
         return static::findBySql($query->getSQL());
+    }
+
+    private static function populate($data)
+    {
+        return array_map(
+            function ($val) {
+                return new static($val);
+            },
+            $data
+        );
     }
 }

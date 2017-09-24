@@ -34,7 +34,7 @@ class MainController extends AbstractController
 
     public function test()
     {
-        $res = TextModel::create('textttt', true);
+        $res = Text::findByFields(['is_active' => true]);
         var_export($res);
 
         die;
