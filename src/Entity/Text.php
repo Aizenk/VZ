@@ -12,6 +12,7 @@ use VZ\Lib\Orm\ActiveRecordInterface;
  *
  * @property int $id
  * @property string $text
+ * @property bool $is_active
  * @method  static $this findOneById($id)
  */
 class Text extends ActiveRecord implements ActiveRecordInterface
@@ -60,4 +61,21 @@ class Text extends ActiveRecord implements ActiveRecordInterface
         return $this;
     }
 
+    /**
+     * @return bool
+     */
+    public function isActive()
+    {
+        return $this->is_active;
+    }
+
+    /**
+     * @param bool $is_active
+     * @return Text
+     */
+    public function setIsActive($is_active)
+    {
+        $this->is_active = $is_active;
+        return $this;
+    }
 }

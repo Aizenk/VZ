@@ -3,6 +3,7 @@
 namespace VZ\Lib\Orm;
 
 use VZ\Lib\Smart;
+use VZ\Lib\Utilities\ArrayHelper;
 
 /**
  * Class ActiveRecord
@@ -13,28 +14,69 @@ abstract class ActiveRecord extends Smart
 {
     public function isNewRecord()
     {
-        return true;
+        return empty($this->id);
     }
 
     public function save()
     {
-        if ($this->isNewRecord()) {
-            $this->insert($this->asArray());
-        } else {
-            $this->update($this->id, $this->asArray());
-        }
-
         var_export('i want to save: ');
         var_export($this->getDataDiff());
+
+        if ($this->isNewRecord()) {
+            return $this->insert($this->asArray());
+        } else {
+            return $this->update($this->id, $this->getDataDiff());
+        }
     }
 
     public function insert($data)
     {
+        if (!ArrayHelper::isAssociative($data, true)) {
+            throw new \LogicException('not associative');
+        }
 
+        $placeHolders = array_map(
+            function ($val) {
+                return ':' . $val;
+            },
+            array_keys($data)
+        );
+
+        $keysExpression = implode(', ', array_keys($data));
+        $valuesExpression = implode(', ', $placeHolders);
+        $tpl = "INSERT INTO %s (%s) VALUES (%s)";
+        $sql = sprintf($tpl, static::tableName(), $keysExpression, $valuesExpression);
+        $st = Dispatcher::instance()->getConnection()->prepare($sql);
+        $mock = new Smart($data);
+
+        foreach ($data as $paramName => $value) {
+            $st->bindParam($paramName, $mock->$paramName);
+        }
+
+        $st->execute();
+
+        return $st->rowCount();
     }
 
     public function update($id, $data)
     {
+        $setExpressions = [];
+
+        foreach ($data as $field => $value) {
+            if (is_bool($value)) {
+                $value = ($value === true) ? 'TRUE' : 'FALSE';
+            } else if (is_string($value)) {
+                $value = "'" . $value . "'";
+            }
+
+            $setExpressions[] = "{$field} = {$value}";
+        }
+        $setExpression = implode(', ', $setExpressions);
+        $preg = "UPDATE %s SET %s WHERE id={$id}";
+        $sql = sprintf($preg, static::tableName(), $setExpression);
+
+        echo($sql);
+        return Dispatcher::instance()->getConnection()->exec($sql);
 
     }
 
@@ -47,7 +89,8 @@ abstract class ActiveRecord extends Smart
      * @param $alias
      * @return Query
      */
-    public static function createQueryBuilder($alias = 't')
+    public
+    static function createQueryBuilder($alias = 't')
     {
         return new Query(static::tableName(), $alias);
     }
