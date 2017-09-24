@@ -1,0 +1,48 @@
+<div class="row" ng-app="partsApp" ng-controller="mainCtrl">
+    <div class="col-xs-4">
+        <form action="" enctype="multipart/form-data" method="post">
+            <input type="file" name="file">
+            <hr>
+            <button class="btn btn-default">Отправить</button>
+        </form>
+    </div>
+</div>
+
+
+<script>
+    $().ready(function () {
+        console.log(1)
+        $('input[type=file]').bootstrapFileInput();
+        $('.file-inputs').bootstrapFileInput();
+    });
+
+    function fileReadDirective() {
+        return {
+            scope: {
+                fileread: "="
+            },
+            link: function (scope, element, attributes) {
+                element.bind("change", function (changeEvent) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (loadEvent) {
+                        scope.$apply(function () {
+                            scope.fileread = loadEvent.target.result;
+                        });
+                    };
+
+                    reader.readAsDataURL(changeEvent.target.files[0]);
+                });
+            }
+        }
+    }
+
+    function mainCtrl($scope) {
+        $scope.uploadme = '';
+    }
+
+    angular
+        .module('partsApp', [])
+        .controller('mainCtrl', mainCtrl)
+        .directive("fileread", fileReadDirective);
+</script>
