@@ -1,4 +1,5 @@
 /vendor
 /.idea
 /01
+/upload
 composer.phar
