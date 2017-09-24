@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use VZ\Lib\Core\AbstractController;
 use VZ\Lib\Render\PageRenderer;
+use VZ\Model\FileUploadModel;
 
 class PartsController extends AbstractController
 {
@@ -28,7 +29,9 @@ class PartsController extends AbstractController
         $file = $request->files->get('file');
 
         if ($file) {
-            $file->move('upload');
+            FileUploadModel::createFromUploadedFile($file);
+            $moved = $file->move('upload');
+
             return new RedirectResponse('/parts/load');
         }
 

@@ -12,6 +12,11 @@ use VZ\Lib\Utilities\ArrayHelper;
  */
 abstract class ActiveRecord extends Smart
 {
+    public function getId()
+    {
+        return empty($this->id);
+    }
+
     public function isNewRecord()
     {
         return empty($this->id);
