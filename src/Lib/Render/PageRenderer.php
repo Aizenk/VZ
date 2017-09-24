@@ -10,7 +10,7 @@ class PageRenderer
     {
         include(static::TPL_DIR . DIRECTORY_SEPARATOR . $layout);
         include(static::TPL_DIR . DIRECTORY_SEPARATOR . $template);
-//        $data = fread($handle, 1000);
+        include(static::TPL_DIR . DIRECTORY_SEPARATOR . 'footer.phtml');
 
         return ' ';
     }
