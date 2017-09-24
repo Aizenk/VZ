@@ -21,6 +21,7 @@ class ControllerProvider
         return [
             MainController::class,
             SettingsController::class,
+            PartsController::class,
         ];
     }
 }

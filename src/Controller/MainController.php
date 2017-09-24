@@ -4,7 +4,6 @@ namespace VZ\Controller;
 
 use VZ\Entity\Text;
 use VZ\Lib\Core\AbstractController;
-use VZ\Lib\Orm\Dispatcher;
 use VZ\Lib\Render\PageRenderer;
 use VZ\Model\TextModel;
 
