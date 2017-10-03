@@ -22,6 +22,7 @@ class ControllerProvider
             MainController::class,
             SettingsController::class,
             PartsController::class,
+            TextsController::class,
         ];
     }
 }

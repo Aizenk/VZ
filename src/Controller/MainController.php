@@ -15,16 +15,8 @@ class MainController extends AbstractController
         $this->addGetRoute('/blog', 'blog');
         $this->addGetRoute('/info', 'info');
         $this->addGetRoute('/test', 'test');
-        $this->addGetRoute('/create-text', 'createText');
     }
 
-    public function createText()
-    {
-        $text = $this->getRequest()->get('text');
-        $res = TextModel::create($text);
-        var_export($res);
-        return 'ok!';
-    }
 
     public function blog()
     {
